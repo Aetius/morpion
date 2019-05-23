@@ -10,9 +10,9 @@ class WhichCase {
 			
 			tagName[e.target.id].insertAdjacentHTML('afterbegin', gamer.whichGamer());
 			caseName.push(e.target.id);
-			if (caseName.length > 8){
-				victoryCondition.array1st2ndGamers();
-			}
+			
+				victoryGame.array1st2ndGamers();
+			
 		}
 	}
 }
@@ -59,43 +59,89 @@ class DefineGamer {
 //define victory's condition with a switch. 
 //objective : divide the caseName array between J1 and J2, and verify if one of them wins. 
 class Victory {
-
-	array1st2ndGamers(){
-		let array1stGamer =[];
-		let array2ndGamer = [];
-
-		for (let i = 0; i < caseName.length; i+=2){
-			array1stGamer.push(caseName[i]);	
-		}
-		for (let j = 1; j<caseName.length; j+=2){
-				array2ndGamer.push(caseName[j]);
-		}
-		alert(array1stGamer.sort());
-		alert(array2ndGamer.sort());
+	constructor(){
+		this.array1stGamer =[];
+		this.array2ndGamer = [];
+		this.A1 = 90;
+		this.A2 = 90;
+		this.A3 = 90;
+		this.victoryPlayer = false;
 	}
 
-	/*gameVictor(){
-		array.sort()
-		for i = 0,...
-			if i+2 < array.length;
-				
+	array1st2ndGamers(){
+		if (caseName.length%2 === 1){
+			this.array1stGamer.push(caseName[caseName.length-1]);
+		}else {
+			this.array2ndGamer.push(caseName[caseName.length-1]);
+		}
+		this.analyseArray();
+	}
+
+	analyseArray(){
+		this.array1stGamer.sort();
+		this.array2ndGamer.sort();
+
+		condition: {
+			for (let l = 0; l<this.array1stGamer.length; l++){
+				this.A1 = parseInt(this.array1stGamer[l], 10);
+				for (let j = 1; j < this.array1stGamer.length; j++){
+					this.A2 = parseInt(this.array1stGamer[j], 10);
+					for (let k=2; k<this.array1stGamer.length; k++){
+						this.A3 = parseInt(this.array1stGamer[k], 10);
+						this.victoryCondition();
+						if (this.victoryPlayer == true){
+							console.log("fini");
+							break condition;
+						}
+					}
+				}
+			}
 
 
+			for (let l = 0; l<this.array2ndGamer.length; l++){
+				this.A1 = parseInt(this.array2ndGamer[l], 10);
+				for (let j = 0; j < this.array2ndGamer.length; j++){
+					this.A2 = parseInt(this.array2ndGamer[j], 10);
+					for (let k=0; k<this.array2ndGamer.length; k++){
+						this.A3 = parseInt(this.array2ndGamer[k], 10);
+						this.victoryCondition();
+						if (this.victoryPlayer == true){
+							console.log("Joueur2 a gagné");
+							gameContinue.endGame();
+							break condition;
+						}
+					}
+				}
+			}
+		}
 
-			condition de victoire
-				switch (A1, A2, A3)
-					case 1 (A1+2 = A2+1 = A3)
-					case 2 (A1 +6 = A2 +3 = A3)
-					case 3 (A1+8 = A2+4 = A3)
-					case 4 (A1 +4 = A2+2 = A3)
+	}
 
-	}*/
+	victoryCondition(){
+		if (((this.A1+2 == this.A2+1) && (this.A2+1== this.A3) && ((this.A1+this.A2+this.A3) == 3 ||(this.A1+this.A2+this.A3) == 12 || (this.A1+this.A2+this.A3) ==21) )|| 
+			((this.A1+6 == this.A2+3) && (this.A2+3 == this.A3)) ||
+			((this.A1+8 == this.A2+4) && (this.A2+4 == this.A3)) || 
+			((this.A1+4 == this.A2+2) && (this.A2+2 == this.A3)) && (this.A1+this.A2+this.A3 == 12)) {
+			return (this.victoryPlayer = true);
+
+		}
+	}
 }
+
+
+class GameOver{
+
+	endGame(){
+		prompt ("voulez vous continuer ?")
+	}
+}
+
 
 //run the programm
 let gamer = new DefineGamer();
 let defineCase = new WhichCase();
-let victoryCondition = new Victory();
+let victoryGame = new Victory();
+let gameContinue = new GameOver();
 let board = document.getElementById('toutesCases');
 let defineName = document.getElementById('changeNames');
 let tagName = document.getElementsByTagName("td");
